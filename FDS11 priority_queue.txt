@@ -1,0 +1,35 @@
+#include <iostream>
+#include <list>
+using namespace std;
+
+template <typename T>
+class PriorityQueue {
+    struct Item { T data; int priority; };
+    list<Item> queue;
+
+public:
+    void insert(const T& data, int priority) {
+        queue.push_back({data, priority});
+        queue.sort([](const Item& a, const Item& b) { return a.priority > b.priority; });
+    }
+    T pop() {
+        T data = queue.front().data;
+        queue.pop_front();
+        return data;
+    }
+    void display() {
+        for (auto& item : queue) cout << item.data << "(" << item.priority << ") ";
+        cout << endl;
+    }
+};
+
+int main() {
+    PriorityQueue<string> pq;
+    pq.insert("Task A", 2);
+    pq.insert("Task B", 1);
+    pq.insert("Task C", 3);
+    pq.display();
+    cout << "Popped: " << pq.pop() << endl;
+    pq.display();
+    return 0;
+}

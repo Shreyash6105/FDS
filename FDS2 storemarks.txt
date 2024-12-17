@@ -1,0 +1,18 @@
+def main():
+    n = int(input("Enter number of students: "))
+    marks = [None if (mark := input(f"Enter marks for student {i + 1} (or 'A' for absent): ")).upper() == 'A' else int(mark) for i in range(n)]
+    valid_marks = [m for m in marks if m is not None]
+
+    print(f"Average score: {sum(valid_marks) / len(valid_marks):.2f}" if valid_marks else "No valid marks.")
+    print(f"Highest score: {max(valid_marks) if valid_marks else 'None'}")
+    print(f"Lowest score: {min(valid_marks) if valid_marks else 'None'}")
+    print(f"Absent students: {marks.count(None)}")
+    print(f"Most frequent mark: {max(set(valid_marks), key=valid_marks.count) if valid_marks else 'None'}")
+
+if _name_ == "_main_":
+    main()
+
+
+
+
+

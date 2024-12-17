@@ -1,0 +1,22 @@
+# Helper functions
+def intersect(l1, l2): return [x for x in l1 if x in l2]
+def union(l1, l2): return l1 + [x for x in l2 if x not in l1]
+def diff(l1, l2): return [x for x in l1 if x not in l2]
+
+# Input groups
+group_A = [1, 2, 3, 4]  # Cricket
+group_B = [3, 4, 5, 6]  # Badminton
+group_C = [1, 5, 7, 8]  # Football
+total_students = list(range(1, 11))  # All students
+
+# Solutions
+both_cricket_badminton = intersect(group_A, group_B)
+either_not_both = union(diff(group_A, group_B), diff(group_B, group_A))
+neither = diff(total_students, union(group_A, group_B))
+cricket_football_not_badminton = diff(intersect(group_A, group_C), group_B)
+
+# Output
+print("a) Both cricket and badminton:", both_cricket_badminton)
+print("b) Either cricket or badminton but not both:", either_not_both)
+print("c) Neither cricket nor badminton:", len(neither))
+print("d) Cricket and football, not badminton:", len(cricket_football_not_badminton))

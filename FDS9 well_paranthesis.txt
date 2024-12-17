@@ -1,0 +1,45 @@
+#include <iostream>
+#include<stack>
+#include<string>
+
+using namespace std;
+
+bool isMatchingPair(char opening,char closing){
+    if(opening=='('&& closing==')') return true;
+    if(opening=='{'&& closing=='}') return true;
+    if(opening=='['&& closing==']') return true;
+    return false;
+}
+
+bool isWellParenthesized(const string & expression){
+    stack<char>s;
+    
+    for(char ch:expression){
+        if(ch=='(' || ch=='{'|| ch=='['){
+            s.push(ch);
+        }
+        else if(ch==')'|| ch=='}'|| ch==']'){
+            if(s.empty() || !isMatchingPair(s.top(),ch)){
+            return false;
+        }
+        s.pop();
+    }
+}    
+return s.empty();
+}
+
+int main() {
+    string expression;
+    cout<<"Enter expreesion to check: ";
+    cin>>expression;
+    
+    if (isWellParenthesized(expression)){
+        cout<<"Well parenthesized."<<endl;
+    }
+    else{
+        cout<<"Not well parenthesized."<<endl;
+    }
+    
+
+    return 0;
+}

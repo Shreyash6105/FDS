@@ -1,0 +1,17 @@
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    return quicksort([x for x in arr if x < pivot]) + [x for x in arr if x == pivot] + quicksort([x for x in arr if x > pivot])
+
+# Main function
+percentages = [78.5, 92.3, 88.7, 65.4, 80.2, 95.5, 70.1, 85.9, 79.3, 90.6]
+
+print("Original percentages:", percentages)
+
+# Sort percentages
+sorted_percentages = quicksort(percentages)
+print("Sorted percentages:", sorted_percentages)
+
+# Display top 5 scores
+print("Top 5 scores:", sorted_percentages[-5:])

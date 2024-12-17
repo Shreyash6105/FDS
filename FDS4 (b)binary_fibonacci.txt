@@ -1,0 +1,23 @@
+def binary_search(arr, key):
+    low, high = 0, len(arr) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == key: return True
+        low, high = (mid + 1, high) if arr[mid] < key else (low, mid - 1)
+    return False
+
+def fibonacci_search(arr, key):
+    fib2, fib1, fibM = 0, 1, 1
+    while fibM < len(arr): fib2, fib1, fibM = fib1, fibM, fib1 + fibM
+    offset = -1
+    while fibM > 1:
+        i = min(offset + fib2, len(arr) - 1)
+        if arr[i] == key: return True
+        if arr[i] < key: fibM, fib1, fib2, offset = fib1, fib2, fib1 - fib2, i
+        else: fibM, fib1, fib2 = fib2, fib1 - fib2, fib2 - fib1
+    return fib1 and arr[offset + 1] == key
+
+roll_numbers = [101, 205, 310, 413, 512, 614, 720, 815, 907, 1001]
+key = int(input("Enter roll number to search: "))
+print(f"Binary Search: {'Found' if binary_search(roll_numbers, key) else 'Not Found'}")
+print(f"Fibonacci Search: {'Found' if fibonacci_search(roll_numbers, key) else 'Not Found'}")

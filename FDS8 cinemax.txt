@@ -1,0 +1,120 @@
+#include <iostream>
+using namespace std;
+
+struct SeatNode {
+    int seatNumber;
+    bool isBooked;
+    SeatNode* next;
+    SeatNode* prev;
+    SeatNode(int num) : seatNumber(num), isBooked(false), next(nullptr), prev(nullptr) {}
+};
+
+class Row {
+    SeatNode* head;
+
+public:
+    Row() : head(nullptr) {
+        for (int i = 1; i <= 7; i++) {
+            SeatNode* newNode = new SeatNode(i);
+            if (!head) {
+                head = newNode;
+                head->next = head->prev = head;
+            } else {
+                SeatNode* tail = head->prev;
+                tail->next = newNode;
+                newNode->prev = tail;
+                newNode->next = head;
+                head->prev = newNode;
+            }
+        }
+    }
+
+    void displayAvailableSeats() {
+        SeatNode* temp = head;
+        cout << "Available seats: ";
+        do {
+            if (!temp->isBooked) cout << temp->seatNumber << " ";
+            temp = temp->next;
+        } while (temp != head);
+        cout << endl;
+    }
+
+    void bookSeat(int seatNumber) {
+        SeatNode* temp = head;
+        do {
+            if (temp->seatNumber == seatNumber) {
+                if (!temp->isBooked) {
+                    temp->isBooked = true;
+                    cout << "Seat " << seatNumber << " booked successfully.\n";
+                } else {
+                    cout << "Seat " << seatNumber << " is already booked.\n";
+                }
+                return;
+            }
+            temp = temp->next;
+        } while (temp != head);
+        cout << "Seat " << seatNumber << " not found.\n";
+    }
+
+    void cancelBooking(int seatNumber) {
+        SeatNode* temp = head;
+        do {
+            if (temp->seatNumber == seatNumber) {
+                if (temp->isBooked) {
+                    temp->isBooked = false;
+                    cout << "Seat " << seatNumber << " booking cancelled.\n";
+                } else {
+                    cout << "Seat " << seatNumber << " is not booked.\n";
+                }
+                return;
+            }
+            temp = temp->next;
+        } while (temp != head);
+        cout << "Seat " << seatNumber << " not found.\n";
+    }
+
+    ~Row() {
+        if (!head) return;
+        SeatNode* temp = head;
+        do {
+            SeatNode* toDelete = temp;
+            temp = temp->next;
+            delete toDelete;
+        } while (temp != head);
+    }
+};
+
+int main() {
+    Row rows[10];
+    int choice, rowNumber, seatNumber;
+
+    do {
+        cout << "\nCinemax Theater Seat Booking:\n1. Display available seats\n2. Book a seat\n3. Cancel a booking\n4. Exit\nEnter your choice: ";
+        cin >> choice;
+
+        if (choice == 4) break;
+
+        cout << "Enter row number (1-10): ";
+        cin >> rowNumber;
+        if (rowNumber < 1 || rowNumber > 10) {
+            cout << "Invalid row number.\n";
+            continue;
+        }
+
+        if (choice == 1) {
+            rows[rowNumber - 1].displayAvailableSeats();
+        } else {
+            cout << "Enter seat number (1-7): ";
+            cin >> seatNumber;
+            if (seatNumber < 1 || seatNumber > 7) {
+                cout << "Invalid seat number.\n";
+                continue;
+            }
+            if (choice == 2) rows[rowNumber - 1].bookSeat(seatNumber);
+            else if (choice == 3) rows[rowNumber - 1].cancelBooking(seatNumber);
+        }
+    } while (true);
+
+    cout << "Exiting...\n";
+    return 0;
+}

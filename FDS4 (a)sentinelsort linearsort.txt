@@ -1,0 +1,20 @@
+def linear_search(arr, key):
+    return key in arr
+
+def sentinel_search(arr, key):
+    last = arr[-1]
+    arr[-1] = key
+    i = 0
+    while arr[i] != key:
+        i += 1
+    arr[-1] = last
+    return i < len(arr) - 1 or arr[-1] == key
+
+# Roll numbers of students
+roll_numbers = [102, 205, 310, 413, 512, 614, 720, 815, 907, 1001]
+print("Roll numbers:", roll_numbers)
+
+# Input and search
+key = int(input("Enter roll number to search: "))
+print(f"Linear Search: {'Found' if linear_search(roll_numbers, key) else 'Not Found'}")
+print(f"Sentinel Search: {'Found' if sentinel_search(roll_numbers, key) else 'Not Found'}")

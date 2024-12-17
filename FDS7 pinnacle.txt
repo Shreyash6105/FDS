@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string name;
+    int prn;
+    Node* next;
+    Node(const string& n, int p, Node* nxt = nullptr) : name(n), prn(p), next(nxt) {}
+};
+
+class PinnacleClub {
+    Node* head = nullptr;
+    Node* tail = nullptr;
+
+public:
+    void addMember(const string& name, int prn) {
+        Node* newNode = new Node(name, prn);
+        if (!head) head = tail = newNode;
+        else tail = tail->next = newNode;
+    }
+
+    void addPresident(const string& name, int prn) { head = new Node(name, prn, head); if (!tail) tail = head; }
+
+    void addSecretary(const string& name, int prn) { addMember(name, prn); }
+
+    void deletePresident() {
+        if (!head) return;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        if (!head) tail = nullptr;
+    }
+
+    void deleteSecretary() {
+        if (!head) return;
+        if (head == tail) { delete head; head = tail = nullptr; return; }
+        Node* temp = head;
+        while (temp->next != tail) temp = temp->next;
+        delete tail;
+        tail = temp;
+        tail->next = nullptr;
+    }
+
+    void deleteMember(int prn) {
+        if (!head) return;
+        if (head->prn == prn) { deletePresident(); return; }
+        Node* temp = head;
+        while (temp->next && temp->next->prn != prn) temp = temp->next;
+        if (temp->next) {
+            Node* toDelete = temp->next;
+            temp->next = toDelete->next;
+            if (toDelete == tail) tail = temp;
+            delete toDelete;
+        }
+    }
+
+    int countMembers() const {
+        int count = 0;
+        for (Node* temp = head; temp; temp = temp->next) count++;
+        return count;
+    }
+
+    void displayMembers() const {
+        for (Node* temp = head; temp; temp = temp->next)
+            cout << "PRN: " << temp->prn << ", Name: " << temp->name << endl;
+    }
+
+    void concatenate(PinnacleClub& other) {
+        if (!head) head = other.head, tail = other.tail;
+        else if (other.head) tail->next = other.head, tail = other.tail;
+        other.head = other.tail = nullptr;
+    }
+
+    ~PinnacleClub() { while (head) deletePresident(); }
+};
+
+int main() {
+    PinnacleClub divA, divB;
+
+    divA.addPresident("Alice", 1);
+    divA.addMember("Bob", 2);
+    divA.addSecretary("Charlie", 3);
+
+    divB.addPresident("Dave", 4);
+    divB.addMember("Eve", 5);
+    divB.addSecretary("Frank", 6);
+
+    cout << "Division A Members:\n";
+    divA.displayMembers();
+    cout << "\nDivision B Members:\n";
+    divB.displayMembers();
+
+    divA.concatenate(divB);
+
+    cout << "\nAfter concatenation, Division A Members:\n";
+    divA.displayMembers();
+
+    cout << "Total members in club: " << divA.countMembers() << endl;
+
+    divA.deletePresident();
+    divA.deleteSecretary();
+
+    cout << "\nAfter deleting President and Secretary, Members:\n";
+    divA.displayMembers();
+
+    return 0;
+}

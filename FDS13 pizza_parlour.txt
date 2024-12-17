@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+class PizzaParlor{
+    int front , rear , size , count ;
+    int*queue;
+
+    public:
+      PizzaParlor(int maxsize): size(maxsize) , front(0) , rear(-1) , count(0){
+        queue = new int [size];
+      }
+      ~PizzaParlor(){delete[] queue ;}
+      bool isfull(){return count == size;}
+      bool isempty(){return count == 0;}
+    void placeOrder(int Order){
+        if(isfull()){
+            cout << "Order is full! order cannot be placed" << Order<< endl;
+            return;
+        }
+    rear = (rear + 1) % size;
+    queue[rear] = Order;
+    count++;
+    cout<<"Order Placed successfully"<< Order <<endl;
+    } 
+    void serveOrder(){
+        if(isempty()){
+            cout<<"Order cannot be served:" << endl;
+            return;
+        }
+        cout<<"Order is served"<< queue[front]<<endl;
+        front = (front + 1) % size;
+        count--;
+    }
+};
+    int main(){
+        int maxOrder = 5;
+        PizzaParlor parlor(maxOrder);
+        parlor.placeOrder(101);
+        parlor.placeOrder(102);
+        parlor.placeOrder(103);
+        parlor.serveOrder();
+        parlor.placeOrder(104);
+        parlor.placeOrder(105);
+        parlor.placeOrder(106);
+        parlor.serveOrder();
+        parlor.serveOrder();
+        
+        return 0;
+    }

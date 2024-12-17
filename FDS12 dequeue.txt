@@ -1,0 +1,64 @@
+#include <iostream>
+#define SIZE 10
+using namespace std;
+
+class Deque {
+    int arr[SIZE], front = -1, rear = -1;
+
+public:
+    bool isFull() { return (front == 0 && rear == SIZE - 1) || (front == rear + 1); }
+    bool isEmpty() { return front == -1; }
+
+    void addFront(int value) {
+        if (isFull()) return void(cout << "Deque is full!\n");
+        front = (front == -1) ? rear = 0 : (front == 0 ? SIZE - 1 : front - 1);
+        arr[front] = value;
+    }
+
+    void addRear(int value) {
+        if (isFull()) return void(cout << "Deque is full!\n");
+        rear = (rear == -1) ? front = 0 : (rear == SIZE - 1 ? 0 : rear + 1);
+        arr[rear] = value;
+    }
+
+    void deleteFront() {
+        if (isEmpty()) return void(cout << "Deque is empty!\n");
+        cout << "Deleted: " << arr[front] << "\n";
+        front = (front == rear) ? rear = -1 : (front == SIZE - 1 ? 0 : front + 1);
+    }
+
+    void deleteRear() {
+        if (isEmpty()) return void(cout << "Deque is empty!\n");
+        cout << "Deleted: " << arr[rear] << "\n";
+        rear = (front == rear) ? front = -1 : (rear == 0 ? SIZE - 1 : rear - 1);
+    }
+
+    void display() {
+        if (isEmpty()) return void(cout << "Deque is empty!\n");
+        cout << "Deque: ";
+        for (int i = front; i != rear; i = (i + 1) % SIZE) cout << arr[i] << " ";
+        cout << arr[rear] << "\n";
+    }
+};
+
+int main() {
+    Deque dq;
+    int choice, value;
+
+    do {
+        cout << "\n1. Add Front\n2. Add Rear\n3. Delete Front\n4. Delete Rear\n5. Display\n6. Exit\nChoice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: cout << "Value: "; cin >> value; dq.addFront(value); break;
+            case 2: cout << "Value: "; cin >> value; dq.addRear(value); break;
+            case 3: dq.deleteFront(); break;
+            case 4: dq.deleteRear(); break;
+            case 5: dq.display(); break;
+            case 6: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice!\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
